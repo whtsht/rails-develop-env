@@ -43,12 +43,12 @@
             shellHook = ''
               export DB_PASS="root"
               export TZ="Asia/Tokyo"
-              export DB_HOST="127.0.0.1"
+              export DB_HOST="mysql"
               export DB_PASS=root
-              export REDIS_URL="127.0.0.1://redis:6379/0"
-              export REDIS_HOST="127.0.0.1"
-              export ES_HOST="127.0.0.1"
-              export SELENIUM_HOST="127.0.0.1"
+              export REDIS_URL="redis://redis:6379/0"
+              export REDIS_HOST="redis"
+              export ES_HOST="elasticsearch"
+              export SELENIUM_HOST="selenium"
             '';
           };
         }
