@@ -1,0 +1,48 @@
+services:
+  mysql:
+    image: mysql:8.0.39
+    command:
+      - "--bind-address=0.0.0.0"
+      - "--character-set-server=utf8mb4"
+    environment:
+      TZ: "Asia/Tokyo"
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+    environment:
+      TZ: "Asia/Tokyo"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+  elasticsearch:
+    image: "elasticsearch:7.17.26"
+    environment:
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+
+  selenium:
+    image: seleniarm/standalone-chromium:latest
+    ports:
+      - 4444:4444
+    environment:
+      TZ: "Asia/Tokyo"
+      SE_NODE_MAX_SESSIONS: 2
+      SE_NODE_OVERRIDE_MAX_SESSIONS: true
+
+volumes:
+  mysql_data:
+  redis_data:
+  elasticsearch_data:

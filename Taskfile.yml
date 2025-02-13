@@ -1,0 +1,53 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task -l
+    silent: true
+
+  update-dep:
+    desc: 依存関係を更新
+    cmds:
+      - bundle check || bundle install
+      - yarn install
+    silent: true
+
+  db-migrate:
+    desc: DBマイグレーション
+    cmds:
+      - bundle exec ridgepole -c config/database.yml -f db/Schemafile --apply
+      - bundle exec ridgepole -c config/database.yml -f db/Schemafile --apply --env test
+    silent: true
+
+  test:
+    desc: テスト実行
+    cmds:
+      - bih/rspec {{.CLI_ARGS}}
+    env:
+      RAILS_ENV: test
+    silent: true
+
+  lint:
+    desc: Linterでコードをチェック
+    cmds:
+      - bundle exec rubocop
+    silent: true
+
+  lint-fix:
+    desc: Linterでコードをチェック & 自動修正
+    cmds:
+      - bundle exec rubocop -a
+    silent: true
+
+  dev:
+    desc: 開発用サーバーを起動
+    deps:
+      - update-dep
+    cmds:
+      - bundle exec foreman start -f Procfile.dev
+      - bundle exec fluentd -c ./config/fluent.conf
+      - bin/rails s
+    silent: true
